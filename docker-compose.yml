@@ -1,0 +1,42 @@
+version: "3"
+services:
+  python-api:
+    build: ./api/python
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+  go-api:
+    build: ./api/go
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  database:
+    build: ./database
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+  pytorch:
+    build: ./ai/pytorch
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  tensorflow:
+    build: ./ai/tensorflow
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+networks:
+  app-network:
